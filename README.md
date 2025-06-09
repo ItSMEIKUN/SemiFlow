@@ -2,12 +2,13 @@
 
 Research Artifact for our **ACSAC 2025** paper: "SemiFlow: Website Fingerprinting Using Semi-Supervised Learning"
 
-Source code is provided for our tool.For ease of use of the tool and for ease of review by reviewers, we provide a [`Docker image`](https://zenodo.org/records/15618129/files/SemiFlow.tar) that contains the components needed to execute the tool.
+We provide the source code for the tool. To facilitate the use of the tool and review by reviewers, we provide a [`Docker image`](https://zenodo.org/records/15618129/files/SemiFlow.tar) that contains the components needed to execute the tool.
+
 ## Prerequisites
 
 ### Hardware dependencies
 
-We used a server with an Intel Xeon Silver 4214R CPU (12 cores, 2.40GHz), 90GB of RAM, 30GB of system disk, and an NVIDIA RTX 3080 Ti GPU (12GB of video memory) as the experimental platform on which we ran all the experiments.We have also placed the dataset in a mirror that we provide, which allows us to run experiments directly for evaluation.
+We used a server with an Intel Xeon Silver 4214R CPU (12 cores, 2.40GHz), 90GB of RAM, a 30GB system disk, and an NVIDIA RTX 3080 Ti GPU (12GB of video memory) as the experimental platform on which we ran all experiments. We placed the datasets in our provided mirrors so that the experiments could be run directly for evaluation.
 
 ### Software dependencies
 ```
@@ -22,13 +23,13 @@ The listed software dependencies form the basis of the technical realization of 
 To minimize the workload of the reviewers, we packaged all the required environment and software dependencies into a [`Docker image`](https://zenodo.org/records/15618129/files/SemiFlow.tar).
 
 ### Dataset
-All the datasets have packed into the docker image. We have also provided a [download link](https://mailnankaieducn-my.sharepoint.com/:u:/g/personal/1811387_mail_nankai_edu_cn/EYdZVCc4tk9AmSTwqb-HRYEBU4Bjw3d3B2M0fl859GLpcQ) for the datasets via OneDrive.
+All the datasets have packed into the docker image. We have also provided a [download link](https://zenodo.org/records/15621086) for the datasets via OneDrive.
 We use publicly available datasets for model experimentation and evaluation. We use the following datasets:
 
 1. AWF dataset [1]: this dataset consists of monitored websites from 1200 Alexa top sites and unmonitored websites from 400,000 Alexa top sites. This dataset was collected in 2016.
 2. DF Dataset [2]. This dataset consists of monitored and unmonitored websites crawled from Alexa top sites. Like the AWF dataset, this dataset was collected in 2016.
 
-You can learn more about the datasets used in each experiment in our published papers. In addition, when we use datasets from these papers, we should cite them correctly in our work on artifacts.
+When we use datasets from these papers, they should be properly cited in our artifact work.
 
 ```
 [1] Vera Rimmer, Davy Preuveneers, Marc Juarez, Tom Van Goethem, and WouterJoosen. 2018.Automated Website Fingerprinting through Deep Learning. In Proceedings of the 25nd Network and Distributed System Security Symposium (NDSS 2018). Internet Society.
@@ -36,12 +37,13 @@ You can learn more about the datasets used in each experiment in our published p
 ```
 1. For the AWF datasets, we use the CW (Closed World) and OW (Open World) datasets. You can download and use these processed datasets:
 
- * [CW](https://drive.google.com/file/d/1ZQqc_pZBSJuwqbniCol-WR14jf--tLPZ/view?usp=sharing): Contains 100 monitored websites, with 400 traffic samples per website.
- * [OW](https://drive.google.com/file/d/1hT__6CZ_QTaD6K04Gn46PoA3P44LHvpb/view?usp=sharing): Contains 200,000 unmonitored websites, with 1 traffic sample per website.
+ * [CW](https://zenodo.org/records/15621086/files/AWF_CW.npz): Contains 100 monitored websites, with 400 traffic samples per website.
+ * [OW](https://zenodo.org/records/15621086/files/AWF_OW.npz): Contains 200,000 unmonitored websites, with 1 traffic sample per website.
 
 2. For the DF dataset we used the CW (Closed World) dataset:
 
- * [CW](https://drive.google.com/file/d/1ZQqc_pZBSJuwqbniCol-WR14jf--tLPZ/view?usp=sharing): Contains 95 monitored websites, with 400 traffic samples per website.
+ * [CW](https://zenodo.org/records/15621086/files/DF_CW.npz): Contains 95 monitored websites, with 400 traffic samples per website.
+ * [OW](https://zenodo.org/records/15621086/files/DF_OW.npz): Contains 200,000 unmonitored websites, with 1 traffic sample per website.
 
 You also download and use the original dataset via the link：[AWF](https://github.com/DistriNet/DLWF) and [DF](https://github.com/msrocean/Tik_Tok).
 
@@ -64,7 +66,7 @@ Download the packed [`Docker image`](https://zenodo.org/records/15618129/files/S
    ```
    You can specify the size of the container's shared memory shm-size as appropriate.
 
-### (1) Closed World Experiment [time required 40 minutes]
+### (1) Closed World Experiment
 
 In this experiment, it is assumed that the victim only visits monitored websites.
 The default command is:
@@ -87,7 +89,7 @@ Thus to carry out the AWF dataset at n=10 and using 8 number of cores the comman
 python train.py --num_workers 8 --n_label 10
 ```
 
-### (2) Open World Experiment: [time required 2 hours]
+### (2) Open World Experiment
 In this experiment, it is a binary categorization problem considering that victims visit unmonitored websites. When this experiment is required, set the following parameters for the experiment:
 - `--setting`  : choices = OW
 - `-n_ow`  : choices = ['20', '40', '80', '100', '200']. Default: 20
