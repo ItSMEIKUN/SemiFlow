@@ -1,16 +1,14 @@
 import argparse
 import os
-import sys
-
-from tools.data_split import split_data
 import numpy as np
-from torch.utils.data import TensorDataset, DataLoader
-from tools.methods import *
-from models.DCC import DCC
-from tools import data_processor
-from tools.evaluator import measurement
-from models.SupConLoss import SupConLoss
 import torch.nn.functional as F
+from torch.utils.data import TensorDataset
+from models.DCC import DCC
+from models.SupConLoss import SupConLoss
+from tools import data_processor
+from tools.data_split import split_data
+from tools.evaluator import measurement
+from tools.methods import *
 
 threshold = 0.95
 

@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 
 
 def length_align(X, seq_len):
@@ -33,7 +32,7 @@ def load_data(data_path):
 
         Returns:
         tuple: Processed feature tensor and label tensor.
-        """
+    """
     # Load data from file
     data = np.load(data_path)
 
@@ -45,7 +44,7 @@ def load_data(data_path):
 
     # Convert to PyTorch tensors
     X = torch.tensor(X, dtype=torch.float32)
-    # 判断是否是已标注样本
+
     if 'y' in data:
         y = data["y"]
         y = torch.tensor(y, dtype=torch.long)
@@ -58,5 +57,5 @@ def load_iter(X, y=None, batch_size=100, is_train=True, num_workers=5):
         dataset = torch.utils.data.TensorDataset(X, y)
         return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=is_train, num_workers=num_workers)
     else:
-        # 无标签数据的情况
+        # The case of unlabeled data
         return torch.utils.data.DataLoader(X, batch_size=batch_size, shuffle=is_train, num_workers=num_workers)
