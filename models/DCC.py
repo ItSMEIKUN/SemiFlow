@@ -1,5 +1,3 @@
-import numpy as np
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -7,23 +5,23 @@ from models.ConvBlock import ConvBlock
 
 
 class DCC(nn.Module):
-    """
-    主模型类，包含特征提取部分和分类器部分。
-    """
 
+    """
+    Master model class with feature extraction part and classifier part.
+    """
     def __init__(self, num_classes):
         super(DCC, self).__init__()
 
-        # 每个卷积块的一些参数设置
+        # Some parameter settings for each convolution block.
         kernel_size = 8
         conv_stride = 1
         pool_size = 8
         pool_stride = 4
 
-        # 卷积块最后一维的长度
+        # Length of the last dimension of the convolution block
         length_after_extraction = 18
 
-        # 特征提取部分，由多个ConvBlock组成
+        # Feature extraction section, consisting of multiple ConvBlocks
         self.base = nn.Sequential(
             ConvBlock(in_channels=1, out_channels=32, kernel_size=kernel_size,
                       stride=conv_stride, pool_size=pool_size, pool_stride=pool_stride,
@@ -42,7 +40,7 @@ class DCC(nn.Module):
             nn.BatchNorm1d(512),  # Batch normalization layer
             nn.ReLU(inplace=True),  # ReLU activation function
         )
-        # 分类器部分
+        # Classifier section
         self.classifier = nn.Sequential(
             nn.Dropout(p=0.7),  # Dropout layer for regularization
             nn.Linear(512, 512, bias=False),  # Fully connected layer
@@ -53,11 +51,11 @@ class DCC(nn.Module):
         )
 
     def forward(self, input):
-        # 如果输入是二维的，增加一个通道维度
+        # If the input is two-dimensional, add a channel dimension
         if input.dim() == 2:
             input = input.unsqueeze(1)
 
-        # 特征提取
+        # Feature extraction
         feature_map = self.base(input)
 
         out = self.classifier(feature_map)
