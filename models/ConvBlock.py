@@ -2,14 +2,14 @@ import torch.nn as nn
 
 
 class ConvBlock(nn.Module):
-    """
-    卷积块，包含两个卷积层、批归一化、激活函数、最大池化和Dropout。
-    """
 
+    """
+    Convolutional block with two convolutional layers, batch normalization, activation function, max pooling and Dropout.
+    """
     def __init__(self, in_channels, out_channels, kernel_size, stride,
                  pool_size, pool_stride, dropout_p, activation):
         super(ConvBlock, self).__init__()
-        padding = kernel_size // 2  # 保持输出尺寸与输入相同
+        padding = kernel_size // 2  # Keep the output size the same as the input.
 
         self.block = nn.Sequential(
             nn.Conv1d(in_channels, out_channels, kernel_size, stride, padding=padding, bias=False),
