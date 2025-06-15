@@ -92,12 +92,12 @@ python train.py --num_workers 8 --n_label 10
 ### (2) Open World Experiment
 In this experiment, it is a binary categorization problem considering that victims visit unmonitored websites. When this experiment is required, set the following parameters for the experiment:
 - `--setting`  : choices = OW
-- `-n_ow`  : choices = ['20', '40', '80', '100', '200']. Default: 20
-The size of the open world inside the test set, 20 for 20k.
+- `-n_ow`  : choices = ['1', '2', '4', '5', '10']. Default: 1
+The size of the open world in the test set represents the number associated with the number of closed worlds in the test set, e.g. 2 in the AWF dataset represents 200 (number of tags per site in the closed world) * 100 (number of site categories) * 2 = 40k number of open sites of size.
 
-So the open world scale is 20k sized commands are:
+Thus, the size of the open world in the AWF dataset is 20k sized commands:
 ```
-python train.py --setting OW --n_ow 20
+python train.py --setting OW --n_ow 1    or   python train.py --setting OW --n_ow 1
 ```
 
 Of course, you can also modify parameters such as the number of training rounds, the number of working threads, and so on.
