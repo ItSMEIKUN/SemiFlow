@@ -29,7 +29,7 @@ def unlabel_args(params):
     X, y = data_processor.load_data(in_path)
     num_classes = len(np.unique(y))
 
-    # 拆分数据集
+    # Split data sets
     train_X, train_y, test_X, test_y, train_ulabel = split_data(X, y, train_size=n_label * num_classes,
                                                                 test_size=200 * num_classes,
                                                                 unlabel_size=50 * num_classes)
@@ -43,7 +43,7 @@ def unlabel_args(params):
         test_size = len(test_X)
         ulabel_size = len(train_ulabel)
         indices = np.random.choice(len(X), size=(train_size + test_size + ulabel_size), replace=False)
-        # 提取对应的样本和标签
+        # Extract the corresponding samples and labels
         X = X[indices]
         y = np.full(shape=(train_size + test_size + ulabel_size), fill_value=(train_y.max() + 1))
         X = torch.tensor(X, dtype=torch.float32)
@@ -80,24 +80,24 @@ def get_label(model, u1, u2, s,device):
             out_w = F.softmax(out_w, dim=1)
             all_predictions.append(out_w)
 
-    # 将所有预测结果堆叠，并进行平均化
+    # Stacking and averaging all projections
     dropout_predictions = torch.stack(all_predictions, dim=1)
     averaged_predictions = torch.mean(dropout_predictions, dim=1)
 
-    # 获取最大概率值及其对应的类别
+    # Get the maximum probability value and its corresponding category
     max_probs, max_idx = torch.max(averaged_predictions, dim=1)
 
-    # 通过阈值来生成伪标签的掩码
+    # Masks for generating pseudo-labels via thresholding
     mask = max_probs.ge(threshold).float()
-    # 伪标签
+
+    # Pseudo-labeling
     label_w = max_idx[mask == 1].long()
 
     mask = mask.cpu()
-    # 在GPU上进行掩码操作，减少CPU和GPU之间的数据传输
     sup_u1 = u1[mask == 0]
     sup_u2 = u2[mask == 0]
 
-    # 强增强操作，并通过mask选出可信的无标签数据
+    # Strong enhancement operation and selection of plausible unlabeled data by mask
     u_s = s[mask == 1]
 
     return sup_u1, sup_u2, u_s, label_w
@@ -161,7 +161,7 @@ def unlabel_train(
                 for _, cur_data in enumerate(test_iter):
                     cur_X, cur_y = cur_data[0].to(device), cur_data[1].to(device)
                     outs, _ = model(cur_X)
-                    # 使用softmax函数将输出转换为概率分布
+                    # Convert the output to a probability distribution using the softmax function
                     outs = torch.softmax(outs, dim=1)
                     valid_pred.append(outs.cpu().numpy())
                     valid_true.append(cur_y.cpu().numpy())
