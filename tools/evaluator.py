@@ -8,22 +8,29 @@ def precision_recall_score(y_true, y_pred, ow_label, th):
     TP, FP, FN = 0, 0, 0
 
     for true_label, pred in zip(y_true, y_pred):
-        # 假设 y_pred 是每个类别的概率分布
+        # y_pred is the probability distribution for each category.
         max_prob = np.max(pred)
         pred_class = np.argmax(pred)
 
         if true_label != ow_label:
             if pred_class != ow_label and max_prob >= th:
-                TP += 1  # 真正例: 标签与预测都不是 ow_label 且预测概率超过阈值
+                # True Example: Neither label nor prediction is ow_label
+                # and the predicted probability exceeds the threshold.
+                TP += 1
             else:
-                FN += 1  # 假负例: 标签不是 ow_label 但是预测为 ow_label 或者预测概率未达阈值
+                # False negative example: label is not ow_label but
+                # predicted as ow_label or predicted probability does not reach threshold.
+                FN += 1
         elif true_label == ow_label:
             if pred_class != ow_label and max_prob >= th:
-                FP += 1  # 假正例: 标签是 ow_label 但是预测不是 ow_label 且预测概率超过阈值
+                # False positive example: label is ow_label but prediction
+                # is not ow_label and prediction probability exceeds threshold.
+                FP += 1
 
-    # 防止除以零的情况
+    # Prevent division by zero.
     precision = TP / (TP + FP) if (TP + FP) > 0 else 0
     recall = TP / (TP + FN) if (TP + FN) > 0 else 0
+
     F1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
     return precision, recall, F1_score
 
