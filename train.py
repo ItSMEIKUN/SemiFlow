@@ -40,7 +40,7 @@ def unlabel_args(params):
         ow_data = np.load(os.path.join( 'datasets', dataset, 'OW.npz'), allow_pickle=True)
         X = ow_data['X']
         train_size = len(train_X)
-        test_size = len(test_X)
+        test_size = n_ow * len(test_X)
         ulabel_size = len(train_ulabel)
         indices = np.random.choice(len(X), size=(train_size + test_size + ulabel_size), replace=False)
         # Extract the corresponding samples and labels
@@ -196,7 +196,7 @@ if __name__ == '__main__':
 
     # Other Setting Parameters
     parser.add_argument("--n_label", type=int, default=5, help="Number of labels per website")
-    parser.add_argument("--n_ow", type=int, default=20, help="Open-world datasets of different quantitative sizes")
+    parser.add_argument("--n_ow", type=int, default=1, help="Open-world datasets of different quantitative sizes")
     params = parser.parse_args()
     model, optimizer, train_iter, test_iter, train_ulabel_iter, num_classes, device, setting = unlabel_args(params)
     unlabel_train(
